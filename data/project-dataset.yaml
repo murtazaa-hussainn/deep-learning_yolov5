@@ -1,0 +1,10 @@
+# This is the yaml config file for training
+train: ../data/images/train/ 
+val: ../data/images/test/
+test: ../data/images/test/
+
+# number of classes
+nc: 4
+
+# class names
+names: ["airplane","bird", "drone","helicopter"]

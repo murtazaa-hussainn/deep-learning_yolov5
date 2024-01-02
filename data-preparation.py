@@ -1,5 +1,13 @@
 import os
 import xml.etree.ElementTree as ET
+from sklearn.model_selection import train_test_split
+import json
+import shutil
+
+# Load the configuration file
+with open('config.json') as json_data_file:
+    config = json.load(json_data_file)
+
 
 # Function to get the data from XML Annotation
 def extract_info_from_xml(xml_file):
@@ -79,6 +87,42 @@ def convert_to_yolov5(info_dict, annotations_path):
     print("\n".join(print_buffer), file= open(save_file_name, "w"))
 
 
+#Utility function to move images 
+def move_files_to_folder(list_of_files, script_dir, destination_folder):
+    if not os.path.exists(os.path.join(script_dir, destination_folder)):
+        os.makedirs(os.path.join(script_dir, destination_folder))
+    for f in list_of_files:
+        try:
+            shutil.move(f, os.path.join(script_dir, destination_folder))
+        except:
+            print(f)
+            assert False
+
+
+def create_partitions(script_dir):
+    # Read images and annotations
+    images = [os.path.join(script_dir, 'images', x) for x in os.listdir(os.path.join(script_dir, 'images'))]
+    annotations = [os.path.join(script_dir, 'annotations', x) for x in os.listdir(os.path.join(script_dir, 'annotations')) if x[-3:] == "txt"]
+
+    images.sort()
+    annotations.sort()
+
+    # Split the dataset into train-valid-test splits 
+    train_images, test_images, train_annotations, test_annotations = train_test_split(images, annotations, test_size = config["partition"]["test"], random_state = 1)
+    if (config["partition"]["val"] > 0):
+        val_images, test_images, val_annotations, test_annotations = train_test_split(test_images, test_annotations, test_size = config["partition"]["val"], random_state = 1)
+
+    # Move the splits into their folders
+    move_files_to_folder(train_images, script_dir, 'images/train')
+    move_files_to_folder(train_annotations, script_dir, 'annotations/train/')
+    move_files_to_folder(test_images, script_dir, 'images/test/')
+    move_files_to_folder(test_annotations, script_dir, 'annotations/test/')
+    if (config["partition"]["val"] > 0):
+        move_files_to_folder(val_images, script_dir, 'images/val/')
+        move_files_to_folder(val_annotations, script_dir, 'annotations/val/')
+    return 'Partitions Created'
+
+
 def main():
     script_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
     xml_annotations_path = os.path.join(script_dir, 'xml_annotations')
@@ -92,6 +136,8 @@ def main():
         # Assuming label file name is the same as the image file name
         info_dict = extract_info_from_xml(os.path.join(xml_annotations_path,file))
         convert_to_yolov5(info_dict, annotations_path)
+
+    create_partitions(script_dir)
 
 
 if __name__ == '__main__':

@@ -25,6 +25,12 @@ import time
 from copy import deepcopy
 from datetime import datetime, timedelta
 from pathlib import Path
+import json
+
+# Load the configuration file
+with open('config.json') as json_data_file:
+    config = json.load(json_data_file)
+    config = config["training-options"]
 
 try:
     import comet_ml  # must be imported before torch (if installed)
@@ -440,14 +446,25 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
 
 
 def parse_opt(known=False):
+    # Configurations import
+    weights = config["weights"] if config["weights"] != "" else ROOT / 'yolov5s.pt'
+    cfg = config["cfg"]
+    data = config["data"] if config["data"] != "" else ROOT / 'data/coco128.yaml'
+    hyp = config["hyp"] if config["hyp"] != "" else ROOT / 'data/hyps/hyp.scratch-low.yaml'
+    epochs = config["epochs"] if config["epochs"] > 0 else 100
+    batch = config["batch"] if config["batch"] > 0 else 16
+    imgsz = config["img-size"] if config["img-size"] > 0 else 640
+    workers = config["workers"] if config["workers"] > 0 else 8
+    name = config["name"] if config["name"] != "" else 'exp'
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default=ROOT / 'yolov5s.pt', help='initial weights path')
-    parser.add_argument('--cfg', type=str, default='', help='model.yaml path')
-    parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='dataset.yaml path')
-    parser.add_argument('--hyp', type=str, default=ROOT / 'data/hyps/hyp.scratch-low.yaml', help='hyperparameters path')
-    parser.add_argument('--epochs', type=int, default=100, help='total training epochs')
-    parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs, -1 for autobatch')
-    parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='train, val image size (pixels)')
+    parser.add_argument('--weights', type=str, default=weights, help='initial weights path')
+    parser.add_argument('--cfg', type=str, default=cfg, help='model.yaml path')
+    parser.add_argument('--data', type=str, default=data, help='dataset.yaml path')
+    parser.add_argument('--hyp', type=str, default=hyp, help='hyperparameters path')
+    parser.add_argument('--epochs', type=int, default=epochs, help='total training epochs')
+    parser.add_argument('--batch-size', type=int, default=batch, help='total batch size for all GPUs, -1 for autobatch')
+    parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=imgsz, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
     parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')
     parser.add_argument('--nosave', action='store_true', help='only save final checkpoint')
@@ -463,9 +480,9 @@ def parse_opt(known=False):
     parser.add_argument('--single-cls', action='store_true', help='train multi-class data as single-class')
     parser.add_argument('--optimizer', type=str, choices=['SGD', 'Adam', 'AdamW'], default='SGD', help='optimizer')
     parser.add_argument('--sync-bn', action='store_true', help='use SyncBatchNorm, only available in DDP mode')
-    parser.add_argument('--workers', type=int, default=8, help='max dataloader workers (per RANK in DDP mode)')
+    parser.add_argument('--workers', type=int, default=workers, help='max dataloader workers (per RANK in DDP mode)')
     parser.add_argument('--project', default=ROOT / 'runs/train', help='save to project/name')
-    parser.add_argument('--name', default='exp', help='save to project/name')
+    parser.add_argument('--name', default=name, help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--quad', action='store_true', help='quad dataloader')
     parser.add_argument('--cos-lr', action='store_true', help='cosine LR scheduler')
