@@ -18,7 +18,6 @@
 *.MOV
 *.avi
 *.data
-*.json
 *.cfg
 !setup.cfg
 !cfg/yolov3*.cfg
@@ -27,6 +26,7 @@ storage.googleapis.com
 runs/*
 data/images/*
 data/labels/*
+data/old_labels/*
 data/annotations/*
 data/xml_annotations/*
 !data/*.yaml

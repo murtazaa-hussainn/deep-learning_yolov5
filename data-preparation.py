@@ -126,6 +126,8 @@ def create_partitions(script_dir):
 def main():
     script_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
     xml_annotations_path = os.path.join(script_dir, 'xml_annotations')
+    labels_path = os.path.join(script_dir, 'labels')
+    old_labels_path = os.path.join(script_dir, 'old_labels')
     annotations_path = os.path.join(script_dir, 'annotations')
 
     # Ensure the annotations folder exists
@@ -138,6 +140,8 @@ def main():
         convert_to_yolov5(info_dict, annotations_path)
 
     create_partitions(script_dir)
+    os.rename(labels_path, old_labels_path)
+    os.rename(annotations_path, labels_path)
 
 
 if __name__ == '__main__':
