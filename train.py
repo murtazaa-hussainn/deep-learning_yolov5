@@ -458,6 +458,8 @@ def parse_opt(known=False):
     imgsz = config["img-size"] if config["img-size"] > 0 else 640
     workers = config["workers"] if config["workers"] > 0 else 8
     name = config["name"] if config["name"] != "" else 'exp'
+    project = config["project"] if config["project"] != "" else ROOT / 'runs/train'
+    checkpoint = config["checkpoint"] if config["checkpoint"] > 0 else 5
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default=weights, help='initial weights path')
@@ -468,7 +470,7 @@ def parse_opt(known=False):
     parser.add_argument('--batch-size', type=int, default=batch, help='total batch size for all GPUs, -1 for autobatch')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=imgsz, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
-    parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')
+    parser.add_argument('--resume', nargs='?', const=True, default=True, help='resume most recent training')
     parser.add_argument('--nosave', action='store_true', help='only save final checkpoint')
     parser.add_argument('--noval', action='store_true', help='only validate final epoch')
     parser.add_argument('--noautoanchor', action='store_true', help='disable AutoAnchor')
@@ -483,7 +485,7 @@ def parse_opt(known=False):
     parser.add_argument('--optimizer', type=str, choices=['SGD', 'Adam', 'AdamW'], default='SGD', help='optimizer')
     parser.add_argument('--sync-bn', action='store_true', help='use SyncBatchNorm, only available in DDP mode')
     parser.add_argument('--workers', type=int, default=workers, help='max dataloader workers (per RANK in DDP mode)')
-    parser.add_argument('--project', default=ROOT / 'runs/train', help='save to project/name')
+    parser.add_argument('--project', default=project, help='save to project/name')
     parser.add_argument('--name', default=name, help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--quad', action='store_true', help='quad dataloader')
@@ -491,7 +493,7 @@ def parse_opt(known=False):
     parser.add_argument('--label-smoothing', type=float, default=0.0, help='Label smoothing epsilon')
     parser.add_argument('--patience', type=int, default=100, help='EarlyStopping patience (epochs without improvement)')
     parser.add_argument('--freeze', nargs='+', type=int, default=[0], help='Freeze layers: backbone=10, first3=0 1 2')
-    parser.add_argument('--save-period', type=int, default=-1, help='Save checkpoint every x epochs (disabled if < 1)')
+    parser.add_argument('--save-period', type=int, default=checkpoint, help='Save checkpoint every x epochs (disabled if < 1)')
     parser.add_argument('--seed', type=int, default=0, help='Global training seed')
     parser.add_argument('--local_rank', type=int, default=-1, help='Automatic DDP Multi-GPU argument, do not modify')
 

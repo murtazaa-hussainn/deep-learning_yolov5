@@ -7,15 +7,16 @@
     },
     "training-options":
     {
-        "weights": "yolov5s.pt",
+        "weights": "../drive/MyDrive/deep-learning_drone/colab_run/aerial-detection-project-20epochs/weights/best.pt",
         "cfg": "models/yolov5s.yaml",
         "data": "data/project-dataset.yaml",
         "hyp": "data/hyps/hyp.scratch-med.yaml",
-        "epochs": 20,
+        "epochs": 100,
         "batch": 24,
         "img-size": 640,
         "name": "aerial-detection-project",
+        "project": "../drive/MyDrive/deep-learning_drone/colab_run/",
+        "checkpoint": 5,
         "workers": 24
     }
-
 }
