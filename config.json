@@ -7,7 +7,7 @@
     },
     "training-options":
     {
-        "weights": "yolo5s-seg.pt",
+        "weights": "yolov5s.pt",
         "cfg": "models/yolov5s.yaml",
         "data": "data/project-dataset.yaml",
         "hyp": "data/hyps/hyp.scratch-med.yaml",
