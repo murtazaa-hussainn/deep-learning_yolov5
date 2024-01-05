@@ -7,17 +7,17 @@
     },
     "training-options":
     {
-        "weights": "../drive/MyDrive/deep-learning_drone/colab_run/aerial-detection-project/weights/last.pt",
-        "cfg": "models/yolov5s.yaml",
-        "data": "data/project-dataset.yaml",
-        "hyp": "data/hyps/hyp.scratch-med.yaml",
-        "epochs": 100,
-        "batch": 60,
-        "img-size": 640,
-        "name": "aerial-detection-project",
-        "project": "../drive/MyDrive/deep-learning_drone/colab_run/",
-        "checkpoint": 5,
+        "weights": "",
+        "cfg": "",
+        "data": "",
+        "hyp": "",
+        "epochs": 0,
+        "batch": 0,
+        "img-size": 0,
+        "name": "0",
+        "project": "",
+        "checkpoint": -1,
         "resume": "../drive/MyDrive/deep-learning_drone/colab_run/aerial-detection-project/weights/last.pt",
-        "workers": 60
+        "workers": -1
     }
 }
