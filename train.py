@@ -28,7 +28,9 @@ from pathlib import Path
 import json
 
 # Load the configuration file
-with open('config.json') as json_data_file:
+script_path = os.path.abspath(__file__)
+script_dir = os.path.dirname(script_path)
+with open(os.path.join(script_dir, 'config.json')) as json_data_file:
     config = json.load(json_data_file)
     config = config["training-options"]
 
