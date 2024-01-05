@@ -460,6 +460,7 @@ def parse_opt(known=False):
     name = config["name"] if config["name"] != "" else 'exp'
     project = config["project"] if config["project"] != "" else ROOT / 'runs/train'
     checkpoint = config["checkpoint"] if config["checkpoint"] > 0 else 5
+    resume = config["resume"]
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default=weights, help='initial weights path')
@@ -470,7 +471,7 @@ def parse_opt(known=False):
     parser.add_argument('--batch-size', type=int, default=batch, help='total batch size for all GPUs, -1 for autobatch')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=imgsz, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
-    parser.add_argument('--resume', nargs='?', const=True, default=True, help='resume most recent training')
+    parser.add_argument('--resume', nargs='?', const=True, default=resume, help='resume most recent training')
     parser.add_argument('--nosave', action='store_true', help='only save final checkpoint')
     parser.add_argument('--noval', action='store_true', help='only validate final epoch')
     parser.add_argument('--noautoanchor', action='store_true', help='disable AutoAnchor')

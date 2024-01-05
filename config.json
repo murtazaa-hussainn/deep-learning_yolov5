@@ -17,6 +17,7 @@
         "name": "aerial-detection-project",
         "project": "../drive/MyDrive/deep-learning_drone/colab_run/",
         "checkpoint": 5,
+        "resume": false,
         "workers": 24
     }
 }
