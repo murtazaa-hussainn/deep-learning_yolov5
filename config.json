@@ -7,7 +7,7 @@
     },
     "training-options":
     {
-        "weights": "/drive/MyDrive/deep-learning_drone/colab_run/aerial-detection-project2/weights/best.pt",
+        "weights": "../drive/MyDrive/deep-learning_drone/colab_run/aerial-detection-project2/weights/best.pt",
         "cfg": "models/yolov5s.yaml",
         "data": "data/project-dataset.yaml",
         "hyp": "data/hyps/hyp.scratch-med.yaml",
